@@ -5,8 +5,9 @@ using namespace std;
 
 const int KEY_NUM = 256;
 int keyState[KEY_NUM];
+int mouseState;
 
-void KeyUpdate() {
+void InputUpdate() {
 	char tKeyState[KEY_NUM];
 	GetHitKeyStateAll(tKeyState);
 	for (int i=0; i<KEY_NUM; i++) {
@@ -16,10 +17,20 @@ void KeyUpdate() {
 			keyState[i]++;
 		}
 	}
+
+	if ((GetMouseInput() & MOUSE_INPUT_LEFT) != 0) {
+		mouseState++;
+	} else {
+		mouseState = 0;
+	}
 }
 
 int GetKey(int keyCode) {
 	return keyState[keyCode];
+}
+
+int GetMouse() {
+	return mouseState;
 }
 
 map<string, int> dataTbl;
@@ -30,7 +41,7 @@ void Load(string fn, string n) {
 	if (t != -1) {
 		dataTbl[n] = t;
 	} else {
-		printfDx("画像ないです！！");
+		printfDx("データないです:%s", fn.c_str());
 	}
 }
 
