@@ -26,10 +26,26 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	state[3][3] = state[4][4] = WHITE;
 	state[3][4] = state[4][3] = BLACK;
 
-	while(ProcessMessage() == 0) {
+	int turn=0;
+
+	while (ProcessMessage() == 0) {
 		InputUpdate();
 		ClearDrawScreen();
 		//clsDx();
+
+		if (GetMouse() == 1) {
+			turn++;
+			int x, y;
+			GetMousePoint(&x, &y);
+
+			int xPos = y/SIZE;
+			int yPos = x/SIZE;
+
+			if (state[xPos][yPos] == NONE && xPos < WIDTH && yPos < HEIGHT) {
+				if (turn % 2 == 0) state[xPos][yPos] = WHITE;
+				else state[xPos][yPos] = BLACK;
+			}
+		}
 		
 		//•`‰æ
 		for (int i = 0; i < HEIGHT; i++) {
