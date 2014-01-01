@@ -3,7 +3,7 @@
 #include "Board.h"
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ) {
-	ChangeWindowMode(TRUE);
+	//ChangeWindowMode(TRUE);
 	SetGraphMode(240, 240, 32);
 	SetOutApplicationLogValidFlag(FALSE);
 	SetMainWindowText("TitleBar");

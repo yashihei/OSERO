@@ -1,4 +1,5 @@
 #include <DxLib.h>
+#include <vector>
 #include "Board.h"
 #include "global.h"
 
@@ -25,6 +26,7 @@ void Board::Update() {
 		updateCnt();
 		clsDx();
 		printfDx("black:%d white:%d", blackCnt, whiteCnt);
+		flipCheck(turn, tx, ty);
 
 		if (onBoard(tx, ty) && state[tx][ty] == NONE) {
 			//8•ûŒü’Tõ
@@ -48,8 +50,8 @@ void Board::Draw() {
 	for (int y = 0; y < HEIGHT; y++) {
 		for (int x = 0; x < WIDTH; x++) {
 			DrawGraph(SIZE * x, SIZE * y, GetHandle("cell"), false);
-			if (state[x][y] == BLACK) DrawGraph(SIZE * x, SIZE * y, GetHandle("black"), true);
-			else if (state[x][y] == WHITE) DrawGraph(SIZE * x, SIZE * y, GetHandle("white"), true);
+			if (state[y][x] == BLACK) DrawGraph(SIZE * x, SIZE * y, GetHandle("black"), true);
+			else if (state[y][x] == WHITE) DrawGraph(SIZE * x, SIZE * y, GetHandle("white"), true);
 		}
 	}
 }
@@ -65,7 +67,7 @@ void Board::turnChange() {
 }
 
 void Board::put(int x, int y, State color) {
-	state[x][y] = color;
+	state[y][x] = color;
 }
 
 void Board::updateCnt() {
@@ -76,4 +78,25 @@ void Board::updateCnt() {
 			else if (state[y][x] == BLACK) blackCnt++;
 		}
 	}
+}
+
+std::vector<Point> Board::flipCheck(State color, int x, int y) {
+	std::vector<Point> vec;
+
+	if (state[y][x] != NONE) {
+		for (int dy = -1; dy < 2; dy++) {
+			for (int dx = -1; dx < 2; dx++) {
+				vec2 = flipCheck2();
+				vec.insert(vec.begin(), vec2.begin(), vec2.end());
+			}
+		}
+	}
+
+	return vec;
+}
+
+
+std::vector<Point> Board::flipCheck2(State color, int x, int y, int dx, int dy)
+{
+	return vec;
 }

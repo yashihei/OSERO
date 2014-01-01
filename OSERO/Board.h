@@ -27,4 +27,6 @@ private:
 	bool onBoard(int x, int y);
 	void put(int x, int y, State color);
 	void updateCnt();
+	std::vector<Point> flipCheck(int x, int y);
+	std::vector<Point> flipCheck2(int x, int y, int dx, int dy);
 };
