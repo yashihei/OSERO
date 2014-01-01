@@ -3,7 +3,7 @@
 #include "global.h"
 
 Board::Board() {
-	turn = 0;
+	turn = BLACK;
 	//memset(state, NONE, WIDTH * HEIGHT);
 	for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < HEIGHT; j++) state[i][j] = NONE;
 	state[3][3] = state[4][4] = WHITE;
@@ -15,27 +15,54 @@ void Board::Update() {
 		int x, y;
 		GetMousePoint(&x, &y);
 
-		int xPos = y/SIZE;
-		int yPos = x/SIZE;
-		
-		//‹²‚ß‚éÎ‚ª‚ ‚ê‚Î
+		int tx = x/SIZE;
+		int ty = y/SIZE;
 
-		if (state[xPos][yPos] == NONE && xPos < WIDTH && yPos < HEIGHT) {
-			if (turn % 2 == 0) state[xPos][yPos] = WHITE;
-			else state[xPos][yPos] = BLACK;
-			turn++;
+		if (!onBoard(tx, ty)) return;
+		put(tx, ty, turn);
+
+		if (onBoard(tx, ty) && state[tx][ty] == NONE) {
+			//8•ûŒü’Tõ
+			for (int dy = -1; dy < 2; dy++) {
+				for (int dx = -1; dx < 2; dx++) {
+					if (dy == dx) continue;
+					int x = dx, y = dy;
+					while(true) {
+						if (!onBoard(x, y) || state[x][y] == turn) break;
+						//’Tõ‰ÓŠ‚ðŽŸ‚É
+						x += dx;
+						y += dy;
+					}
+				}
+			}
+			turnChange();
 		}
-	}
-	
-	//•`‰æ
-	for (int i = 0; i < HEIGHT; i++) {
-		for (int j = 0; j < HEIGHT; j++) {
-			DrawGraph(SIZE * j, SIZE * i, GetHandle("cell"), false);
-			if (state[i][j] == BLACK) DrawGraph(SIZE * j, SIZE * i, GetHandle("black"), true);
-			else if (state[i][j] == WHITE) DrawGraph(SIZE * j, SIZE * i, GetHandle("white"), true);
+
+		if (state[tx][ty] == NONE && tx < WIDTH && ty < HEIGHT) {
 		}
 	}
 }
 
-void Board::flipCheck() {
+void Board::Draw() {
+	for (int i = 0; i < HEIGHT; i++) {
+		for (int j = 0; j < HEIGHT; j++) {
+			DrawGraph(SIZE * j, SIZE * i, GetHandle("cell"), false);
+			if (state[j][i] == BLACK) DrawGraph(SIZE * j, SIZE * i, GetHandle("black"), true);
+			else if (state[j][i] == WHITE) DrawGraph(SIZE * j, SIZE * i, GetHandle("white"), true);
+		}
+	}
+}
+
+bool Board::onBoard(int x, int y) {
+	if (x < 0 || x > WIDTH || y < 0 || y > HEIGHT) return false;
+	return true;
+}
+
+void Board::turnChange() {
+	if (turn == BLACK) turn = WHITE;
+	else turn = BLACK;
+}
+
+void Board::put(int x, int y, State color) {
+	state[x][y] = color;
 }

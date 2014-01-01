@@ -13,12 +13,15 @@ class Board {
 	};
 
 	State state[HEIGHT][WIDTH];
+	State turn;
 
-	int turn;
+	void turnChange();
+	bool onBoard(int x, int y);
+	void put(int x, int y, State color);
 
-	void flipCheck();
 public:
 	Board();
 
 	void Update();
+	void Draw();
 };

@@ -13,7 +13,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	Load("dat/white.png", "white");
 	Load("dat/black.png", "black");
 
-	Board* board = new Board();//C++11‚Ì‚ ‚êŽg‚¤H
+	Board* board = new Board();
 
 	while (ProcessMessage() == 0) {
 		InputUpdate();
@@ -21,6 +21,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		//clsDx();
 
 		board->Update();
+		board->Draw();
 
 		ScreenFlip();
 		if (GetKey(KEY_INPUT_ESCAPE) == 1) break;
