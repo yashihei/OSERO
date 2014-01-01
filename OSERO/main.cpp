@@ -4,6 +4,7 @@
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ) {
 	ChangeWindowMode(TRUE);
+	SetGraphMode(240, 240, 32);
 	SetOutApplicationLogValidFlag(FALSE);
 	SetMainWindowText("TitleBar");
 	if (DxLib_Init() == -1) return -1;
@@ -18,7 +19,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	while (ProcessMessage() == 0) {
 		InputUpdate();
 		ClearDrawScreen();
-		//clsDx();
 
 		board->Update();
 		board->Draw();

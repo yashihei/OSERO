@@ -4,7 +4,8 @@
 
 Board::Board() {
 	turn = BLACK;
-	//memset(state, NONE, WIDTH * HEIGHT);
+	blackCnt = 2;
+	whiteCnt = 2;
 	for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < HEIGHT; j++) state[i][j] = NONE;
 	state[3][3] = state[4][4] = WHITE;
 	state[3][4] = state[4][3] = BLACK;
@@ -20,6 +21,10 @@ void Board::Update() {
 
 		if (!onBoard(tx, ty)) return;
 		put(tx, ty, turn);
+		turnChange();
+		updateCnt();
+		clsDx();
+		printfDx("black:%d white:%d", blackCnt, whiteCnt);
 
 		if (onBoard(tx, ty) && state[tx][ty] == NONE) {
 			//8•ûŒü’Tõ
@@ -35,20 +40,16 @@ void Board::Update() {
 					}
 				}
 			}
-			turnChange();
-		}
-
-		if (state[tx][ty] == NONE && tx < WIDTH && ty < HEIGHT) {
 		}
 	}
 }
 
 void Board::Draw() {
-	for (int i = 0; i < HEIGHT; i++) {
-		for (int j = 0; j < HEIGHT; j++) {
-			DrawGraph(SIZE * j, SIZE * i, GetHandle("cell"), false);
-			if (state[j][i] == BLACK) DrawGraph(SIZE * j, SIZE * i, GetHandle("black"), true);
-			else if (state[j][i] == WHITE) DrawGraph(SIZE * j, SIZE * i, GetHandle("white"), true);
+	for (int y = 0; y < HEIGHT; y++) {
+		for (int x = 0; x < WIDTH; x++) {
+			DrawGraph(SIZE * x, SIZE * y, GetHandle("cell"), false);
+			if (state[x][y] == BLACK) DrawGraph(SIZE * x, SIZE * y, GetHandle("black"), true);
+			else if (state[x][y] == WHITE) DrawGraph(SIZE * x, SIZE * y, GetHandle("white"), true);
 		}
 	}
 }
@@ -65,4 +66,14 @@ void Board::turnChange() {
 
 void Board::put(int x, int y, State color) {
 	state[x][y] = color;
+}
+
+void Board::updateCnt() {
+	blackCnt = whiteCnt = 0;
+	for (int y = 0; y < HEIGHT; y++) {
+		for (int x = 0; x < WIDTH; x++) {
+			if (state[y][x] == WHITE) whiteCnt++;
+			else if (state[y][x] == BLACK) blackCnt++;
+		}
+	}
 }

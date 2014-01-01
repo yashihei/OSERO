@@ -1,5 +1,4 @@
 #pragma once
-#include <array>
 
 class Board {
 	static const int HEIGHT = 8;
@@ -14,14 +13,18 @@ class Board {
 
 	State state[HEIGHT][WIDTH];
 	State turn;
-
-	void turnChange();
-	bool onBoard(int x, int y);
-	void put(int x, int y, State color);
+	int blackCnt;
+	int whiteCnt;
 
 public:
 	Board();
 
 	void Update();
 	void Draw();
+
+private:
+	void turnChange();
+	bool onBoard(int x, int y);
+	void put(int x, int y, State color);
+	void updateCnt();
 };
