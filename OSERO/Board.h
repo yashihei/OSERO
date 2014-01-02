@@ -28,14 +28,15 @@ private:
 	State turn;
 	int blackCnt;
 	int whiteCnt;
-	std::vector<Point> pos;
+	std::vector<Point> pos;//Ç–Ç¡Ç≠ÇËï‘ÇπÇÁÇÍÇÈÉ}ÉXäiî[êÊ
 
 private:
 	void turnChange();
 	bool onBoard(int x, int y);
 	void put(int x, int y, State color);
 	void updateCnt();
-	std::vector<Point> flipCheck(int x, int y);
-	std::vector<Point> flipCheck2(int x, int y, int dx, int dy);
+	std::vector<Point> flipCheck(State color, int x, int y);
+	std::vector<Point> flipCheck2(State color, int x, int y, int dx, int dy);
 	void searchTurn();
+	void printState();
 };

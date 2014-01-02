@@ -11,6 +11,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	Load("dat/cell.png", "cell");
+	Load("dat/light_cell.png", "light_cell");
 	Load("dat/white.png", "white");
 	Load("dat/black.png", "black");
 
