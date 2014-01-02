@@ -1,5 +1,4 @@
 #include <DxLib.h>
-#include <vector>
 #include "Board.h"
 #include "global.h"
 
@@ -7,9 +6,11 @@ Board::Board() {
 	turn = BLACK;
 	blackCnt = 2;
 	whiteCnt = 2;
+	printfDx("black:%d white:%d", blackCnt, whiteCnt);
 	for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < HEIGHT; j++) state[i][j] = NONE;
-	state[3][3] = state[4][4] = WHITE;
-	state[3][4] = state[4][3] = BLACK;
+	int p = WIDTH/2 - 1;
+	state[p][p] = state[p+1][p+1] = WHITE;
+	state[p][p+1] = state[p+1][p] = BLACK;
 }
 
 void Board::Update() {
@@ -21,27 +22,21 @@ void Board::Update() {
 		int ty = y/SIZE;
 
 		if (!onBoard(tx, ty)) return;
-		put(tx, ty, turn);
-		turnChange();
-		updateCnt();
-		clsDx();
-		printfDx("black:%d white:%d", blackCnt, whiteCnt);
-		flipCheck(turn, tx, ty);
+		//put(tx, ty, turn);
+		//turnChange();
 
-		if (onBoard(tx, ty) && state[tx][ty] == NONE) {
-			//8•ûŒü’Tõ
-			for (int dy = -1; dy < 2; dy++) {
-				for (int dx = -1; dx < 2; dx++) {
-					if (dy == dx) continue;
-					int x = dx, y = dy;
-					while(true) {
-						if (!onBoard(x, y) || state[x][y] == turn) break;
-						//’Tõ‰ÓŠ‚ðŽŸ‚É
-						x += dx;
-						y += dy;
-					}
-				}
+		//‚Ð‚Á‚­‚è•Ô‚¹!
+		auto vec = flipCheck(tx, ty);
+		if (!vec.empty()) {
+			put(tx, ty, turn);
+			for (auto& it: vec) {
+				put(it.x, it.y, turn);
 			}
+			turnChange();
+			updateCnt();
+			clsDx();
+			printfDx("black:%d white:%d", blackCnt, whiteCnt);
+			//if (chkGameOver())
 		}
 	}
 }
@@ -80,14 +75,14 @@ void Board::updateCnt() {
 	}
 }
 
-std::vector<Point> Board::flipCheck(State color, int x, int y) {
+std::vector<Point> Board::flipCheck(int x, int y) {
 	std::vector<Point> vec;
 
-	if (state[y][x] != NONE) {
+	if (state[y][x] == NONE) {
 		for (int dy = -1; dy < 2; dy++) {
 			for (int dx = -1; dx < 2; dx++) {
-				vec2 = flipCheck2();
-				vec.insert(vec.begin(), vec2.begin(), vec2.end());
+				auto vec2 = flipCheck2(x, y, dx, dy);
+				if (!vec2.empty()) vec.insert(vec.begin(), vec2.begin(), vec2.end());
 			}
 		}
 	}
@@ -95,8 +90,29 @@ std::vector<Point> Board::flipCheck(State color, int x, int y) {
 	return vec;
 }
 
-
-std::vector<Point> Board::flipCheck2(State color, int x, int y, int dx, int dy)
+std::vector<Point> Board::flipCheck2(int x, int y, int dx, int dy)
 {
+	std::vector<Point> vec;
+
+	while(true) {
+		x += dx;
+		y += dy;
+
+		if (!onBoard(x, y) || state[y][x] == NONE) {
+			vec.clear();
+			break;
+		}
+		if (state[y][x] == turn) break;
+		vec.push_back(Point(x, y));
+	}
+
 	return vec;
+}
+
+void Board::searchTurn() {
+	for (int y = 0; y < HEIGHT; y++) {
+		for (int x = 0; x < WIDTH; x++) {
+			pos = flipCheck(x, y);
+		}
+	}
 }

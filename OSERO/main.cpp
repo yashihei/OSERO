@@ -4,7 +4,7 @@
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ) {
 	//ChangeWindowMode(TRUE);
-	SetGraphMode(240, 240, 32);
+	SetGraphMode(Board::SIZE * Board::WIDTH, Board::SIZE * Board::WIDTH, 32);
 	SetOutApplicationLogValidFlag(FALSE);
 	SetMainWindowText("TitleBar");
 	if (DxLib_Init() == -1) return -1;

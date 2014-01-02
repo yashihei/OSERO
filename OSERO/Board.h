@@ -1,10 +1,23 @@
 #pragma once
+#include <vector>
+
+struct Point {
+	int x, y;
+	Point(int x, int y) { this->x = x, this->y = y; }
+};
 
 class Board {
-	static const int HEIGHT = 8;
-	static const int WIDTH = 8;
+public:
+	Board();
+
+	void Update();
+	void Draw();
+
+	static const int HEIGHT = 20;
+	static const int WIDTH = 20;
 	static const int SIZE = 30;
 
+private:
 	enum State : int {
 		NONE,
 		BLACK,
@@ -15,12 +28,7 @@ class Board {
 	State turn;
 	int blackCnt;
 	int whiteCnt;
-
-public:
-	Board();
-
-	void Update();
-	void Draw();
+	std::vector<Point> pos;
 
 private:
 	void turnChange();
@@ -29,4 +37,5 @@ private:
 	void updateCnt();
 	std::vector<Point> flipCheck(int x, int y);
 	std::vector<Point> flipCheck2(int x, int y, int dx, int dy);
+	void searchTurn();
 };
