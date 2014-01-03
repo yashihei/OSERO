@@ -12,6 +12,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	Load("dat/cell.png", "cell");
 	Load("dat/light_cell.png", "light_cell");
+	//Load("dat/yello_cell.png", "yello_cell");
 	Load("dat/white.png", "white");
 	Load("dat/black.png", "black");
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <array>
 
 struct Point {
 	int x, y;
@@ -24,11 +25,13 @@ private:
 		WHITE,
 	};
 
-	State state[HEIGHT][WIDTH];
+	//State state[HEIGHT][WIDTH];
+	std::array<std::array<State, WIDTH>, HEIGHT> state;
 	State turn;
 	int blackCnt;
 	int whiteCnt;
-	std::vector<Point> pos;//‚Ğ‚Á‚­‚è•Ô‚¹‚ç‚ê‚éƒ}ƒXŠi”[æ
+	std::vector<Point> pos;//‚¨‚¯‚éêŠŠi”[æ
+	std::vector<Point> pos2;//‚Ğ‚Á‚­‚è•Ô‚¹‚éêŠŠi”[æ
 
 private:
 	void turnChange();
@@ -37,6 +40,7 @@ private:
 	void updateCnt();
 	std::vector<Point> flipCheck(State color, int x, int y);
 	std::vector<Point> flipCheck2(State color, int x, int y, int dx, int dy);
-	void searchTurn();
+	void searchTurn();//’u‚¯‚éêŠ‚ğ’T‚·
 	void printState();
+	void passCheck();
 };
