@@ -1,9 +1,14 @@
-OSERO
+# OSERO
+DXLib + C++で制作した普通のオセロです  
+ビルドしたものはこちら
+https://www.dropbox.com/s/6ulghkee6fva07r/OSERO.zip
 
-お借りした素材
+![](ss.JPG)
 
-効果音
+## お借りした素材
+
+### 効果音
 ザ・マッチメイカァズ
 
-フォント
+### フォント
 BitmapMania+
