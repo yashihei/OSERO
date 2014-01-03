@@ -1,5 +1,6 @@
 #include <Dxlib.h>
 #include <string>
+#include <sstream>
 #include <map>
 using namespace std;
 
@@ -53,4 +54,10 @@ void Load(string fn, string n) {
 
 int GetHandle(string n) {
 	return dataTbl[n];
+}
+
+string IntToString(int number) {
+	stringstream ss;
+	ss << number;
+	return ss.str();
 }

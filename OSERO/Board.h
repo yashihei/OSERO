@@ -26,6 +26,12 @@ private:
 		WHITE,
 	};
 
+	enum Seq : int {
+		PLAY,
+		PASS,
+		GAMEOVER
+	};
+
 	//State state[HEIGHT][WIDTH];
 	std::array<std::array<State, WIDTH>, HEIGHT> state;
 	State turn;
@@ -33,7 +39,8 @@ private:
 	int whiteCnt;
 	std::vector<Point> pos;//‚¨‚¯‚éêŠŠi”[æ
 	std::vector<Point> pos2;//‚Ğ‚Á‚­‚è•Ô‚¹‚éêŠŠi”[æ
-	bool gameover;
+	Seq seq;
+	int posX, posY;
 
 private:
 	void turnChange();

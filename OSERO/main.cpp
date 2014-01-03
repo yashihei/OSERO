@@ -4,7 +4,7 @@
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ) {
 	//ChangeWindowMode(TRUE);
-	SetGraphMode(Board::SIZE * Board::WIDTH + 150, Board::SIZE * Board::WIDTH, 32);
+	SetGraphMode(Board::SIZE * Board::WIDTH + 130, Board::SIZE * Board::WIDTH, 32);
 	SetOutApplicationLogValidFlag(FALSE);
 	SetMainWindowText("OSERO");
 	if (DxLib_Init() == -1) return -1;
@@ -16,6 +16,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	Load("dat/white.png", "white");
 	Load("dat/black.png", "black");
 	Load("dat/on11.wav", "click_se");
+	Load("dat/clap03_fade.wav", "clap_se");
 
 	//ÉtÉHÉìÉgì«Ç›çûÇ›
 	const char* font_path = "dat/BMmini.TTF";

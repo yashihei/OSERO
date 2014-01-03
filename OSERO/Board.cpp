@@ -8,10 +8,9 @@ Board::Board() {
 
 void Board::Init() {
 	turn = BLACK;
-	gameover = false;
+	seq = PLAY;
 	blackCnt = 2;
 	whiteCnt = 2;
-	//printState();
 	for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < HEIGHT; j++) state[i][j] = NONE;
 	int p = WIDTH/2 - 1;
 	state[p][p] = state[p+1][p+1] = WHITE;
@@ -20,47 +19,40 @@ void Board::Init() {
 }
 
 void Board::Update() {
-	int x, y;
-	GetMousePoint(&x, &y);
-	int tx = x/SIZE;
-	int ty = y/SIZE;
+	GetMousePoint(&posX, &posY);
+	int tx = posX/SIZE;
+	int ty = posY/SIZE;
 
+	pos2.clear();
 	if (!onBoard(tx, ty)) return;
 
 	if (GetMouse() == 1) {
 
-		if (gameover) {
-			clsDx();
+		if (seq == GAMEOVER) {
 			Init();
 			return;
 		}
 
-		//put(tx, ty, turn);
-		//turnChange();
-
 		//ひっくり返せ!
 		auto vec = flipCheck(turn, tx, ty);
 		if (!vec.empty()) {
+			if (seq == PASS) seq = PLAY;
 			put(tx, ty, turn);
 			for (auto& it: vec) {
 				put(it.x, it.y, turn);
 			}
 			turnChange();
 			updateCnt();
-			clsDx();
-			//printState();
 			searchTurn();
 			PlaySoundMem(GetHandle("click_se"), DX_PLAYTYPE_BACK);
 			if (pos.empty()) {
-				//printfDx("\n");
-				turnChange();
+				turnChange();//パスだから次に進める
 				searchTurn();
 				if (pos.empty()) {
-					//ゲームオーバー
-					printfDx("ゲーム終了 %sの勝ち\nクリックでリトライ", blackCnt > whiteCnt ? "くろ" : "しろ");
-					gameover = true;
+					seq = GAMEOVER;
+					PlaySoundMem(GetHandle("clap_se"), DX_PLAYTYPE_BACK);
 				} else {
-					printfDx("%sパス", turn == WHITE ? "くろ" : "しろ");
+					seq = PASS;
 				}
 			}
 		}
@@ -95,7 +87,7 @@ void Board::Draw() {
 	}
 
 	//右のステータス
-	DrawString(SIZE * WIDTH + 10, 10, "BLACK", GetColor(255,255,255));
+	printState();
 }
 
 bool Board::onBoard(int x, int y) {
@@ -164,7 +156,35 @@ void Board::searchTurn() {
 
 void Board::printState() {
 	std::string s;
-	if (turn == BLACK) s = "くろ";
-	else s = "しろ";
-	printfDx("black:%d white:%d\n%sのターン", blackCnt, whiteCnt, s.c_str());
+	if (turn == BLACK) s = "BLACK";
+	else s = "WHITE";
+	s = "TURN:" + s;
+	const int X = SIZE * WIDTH + 10;
+	const int WHITE = GetColor(255,255,255);
+	int font_size = 18;
+
+	s = "BLACK:" + IntToString(blackCnt);
+	DrawString(X, 10, s.c_str(), WHITE);
+	s = "WHITE:" + IntToString(whiteCnt);
+	DrawString(X, font_size + 10, s.c_str(), WHITE);
+
+	if (seq == GAMEOVER) {
+		if (blackCnt > whiteCnt) s = "BLACK";
+		else s = "WHITE";
+		s += " WIN";
+		DrawString(X, font_size* 2 + 10, s.c_str(), WHITE);
+	}
+	if (seq == PASS) {
+		if (turn == State::WHITE) s = "BLACK";
+		else s = "WHITE";
+		s += " PASS";
+		DrawString(X, font_size* 2 + 10, s.c_str(), WHITE);
+	}
+
+	int c = WHITE;
+	if (posX > X && posY > SIZE*HEIGHT - font_size - 10) {
+		c = GetColor(255, 0, 0);
+		if (GetMouse() == 1) Init();//ここにこれが入るの泣きたい
+	}
+	DrawString(X, SIZE*HEIGHT - font_size - 10, "RESTART", c);
 }
