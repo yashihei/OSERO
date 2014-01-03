@@ -4,10 +4,14 @@
 #include "global.h"
 
 Board::Board() {
+}
+
+void Board::Init() {
 	turn = BLACK;
+	gameover = false;
 	blackCnt = 2;
 	whiteCnt = 2;
-	printState();
+	//printState();
 	for (int i = 0; i < HEIGHT; i++) for (int j = 0; j < HEIGHT; j++) state[i][j] = NONE;
 	int p = WIDTH/2 - 1;
 	state[p][p] = state[p+1][p+1] = WHITE;
@@ -25,6 +29,12 @@ void Board::Update() {
 
 	if (GetMouse() == 1) {
 
+		if (gameover) {
+			clsDx();
+			Init();
+			return;
+		}
+
 		//put(tx, ty, turn);
 		//turnChange();
 
@@ -38,16 +48,17 @@ void Board::Update() {
 			turnChange();
 			updateCnt();
 			clsDx();
-			printState();
+			//printState();
 			searchTurn();
-			//passCheck();
-			printfDx("\n");
+			PlaySoundMem(GetHandle("click_se"), DX_PLAYTYPE_BACK);
 			if (pos.empty()) {
+				//printfDx("\n");
 				turnChange();
 				searchTurn();
 				if (pos.empty()) {
 					//ゲームオーバー
-					printfDx("ゲーム終了 %sの勝ち", blackCnt > whiteCnt ? "くろ" : "しろ");
+					printfDx("ゲーム終了 %sの勝ち\nクリックでリトライ", blackCnt > whiteCnt ? "くろ" : "しろ");
+					gameover = true;
 				} else {
 					printfDx("%sパス", turn == WHITE ? "くろ" : "しろ");
 				}
@@ -82,6 +93,9 @@ void Board::Draw() {
 			DrawGraph(SIZE * it.x, SIZE * it.y, handle, true);
 		}
 	}
+
+	//右のステータス
+	DrawString(SIZE * WIDTH + 10, 10, "BLACK", GetColor(255,255,255));
 }
 
 bool Board::onBoard(int x, int y) {
@@ -153,7 +167,4 @@ void Board::printState() {
 	if (turn == BLACK) s = "くろ";
 	else s = "しろ";
 	printfDx("black:%d white:%d\n%sのターン", blackCnt, whiteCnt, s.c_str());
-}
-
-void Board::passCheck() {
 }

@@ -36,8 +36,14 @@ int GetMouse() {
 map<string, int> dataTbl;
 
 void Load(string fn, string n) {
-	int t;
-	t = LoadGraph(fn.c_str());
+	auto pos = fn.find(".");
+	auto type = fn.substr(pos+1);//Šg’£Žq‚ðŽæ“¾
+	int t = -1;
+	if (type == "png" || type == "jpg") {
+		t = LoadGraph(fn.c_str());
+	} else if (type == "wav" || type == "mp3") {
+		t = LoadSoundMem(fn.c_str());
+	}
 	if (t != -1) {
 		dataTbl[n] = t;
 	} else {

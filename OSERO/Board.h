@@ -11,11 +11,12 @@ class Board {
 public:
 	Board();
 
+	void Init();
 	void Update();
 	void Draw();
 
-	static const int HEIGHT = 20;
-	static const int WIDTH = 20;
+	static const int HEIGHT = 8;
+	static const int WIDTH = 8;
 	static const int SIZE = 30;
 
 private:
@@ -32,6 +33,7 @@ private:
 	int whiteCnt;
 	std::vector<Point> pos;//‚¨‚¯‚éêŠŠi”[æ
 	std::vector<Point> pos2;//‚Ğ‚Á‚­‚è•Ô‚¹‚éêŠŠi”[æ
+	bool gameover;
 
 private:
 	void turnChange();
@@ -42,5 +44,4 @@ private:
 	std::vector<Point> flipCheck2(State color, int x, int y, int dx, int dy);
 	void searchTurn();//’u‚¯‚éêŠ‚ğ’T‚·
 	void printState();
-	void passCheck();
 };
